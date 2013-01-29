@@ -1,0 +1,90 @@
+
+
+== Introduction ==
+This is very little framework that allows to keep update a generic UI with some generic simple data writing less possible code.
+From the data will be possible generate other outputs, now a DOM format is provided.
+Also the writing part in the future  could be eliminated by writing a class generator, but this is another story.
+
+== How it should works ==
+
+This framework is a very free interpretation of the MVC controller with some additional stuff like the generation of an DOM structure in order to import/export data in an uniform way.
+There 3 main actors:
+
+- A class property, is a simple getter/setter class where the information can be managed by any piece of software
+- A class UI, this implement the UI with customer features. This is connected with the data and modification in the data are reflected in the UI
+- A class delegate, connect property and UI in an invisible manner just on the Q_PROPERTY defined in the getter/setter class.
+
+Let's try explain with an example:
+In the getter/setter class the Q_PROPERTY foo wants to be connected to an UI.
+You need to declare a class property (see below), inside the class a Q_PROPERTY foo is declared.
+With the property should be declared a method setter as a slot, a getter to read the value and signal that must be emitted when the property change.
+In the UI (see below) there must be the same thing, a slot connect to the UI  and signal that has to be emitted when the UI change.
+The connection are made on well know naming convention (explained below).
+All these components are put together with the delegate class that has function of:
+
+1. Silent Connection between the data and the UI
+2. Provide a generic interface to access the data set/get and the UI
+3. Provide DOM management in order export/import DOM and update data&UI
+
+ Note that name convention is very important, also note that in actual implementation only property with one parameters based on 
+ standard QVariant type are manageable 
+
+== Class property ==
+
+1. Create a property class that inherits from DataUIHandlerProperty
+2. Declare the Q_PROPERTY you need to control in this way
+
+For example I Have a Q_PROPERTY, foo, that is a  QString:
+
+Q_PROPERTY(QString foo READ description WRITE setFoo NOTIFY fooPropertyChanged)
+
+it's very important that:
+
+a. The setter name has the prefix set and the nome of the property, in this case foo property needs setFoo.
+Please note the F is uppercase.
+b.  Declaring with NOTIFY the emitted signal when the property change. The name is completely free.
+
+
+== Class UI ==
+
+1. Create a UI class that inherits from DataUIHandlerUI
+2. To connect the UI of the Q_PROPERTY foo in the above example, declare a signal:
+	void fooUIChanged(QString foo);
+
+Please note foo + UIChanged (uppercase/lowercase are important)
+	
+3. Also declare a slot 
+	void fooUIUpdate(QString foo)
+	
+Please note foo + UIUpdate (uppercase/lowercase are important)
+
+
+== Class delegate ==
+
+1. Create a delegate class that inherits from DataUIHandlerDelegate
+2. This class should re-implement only the constructor
+
+For example, Test1_delegate
+
+Test1_Delegate(Test1_Property * property, Test1_UI * ui , QObject *parent = 0);
+
+Test1_Delegate::Test1_Delegate(Test1_Property * property, Test1_UI * ui , QObject *parent) :
+    DataUiHandlerDelegate((DataUiHandlerProperty *)property,(DataUiHandlerUI*)ui,parent)
+
+== Put all together ==
+So, now put the glue all together.
+Now, you have all the piece. What you need simply generate the class Property and UI and init the delegate
+For example:
+	Test1_UI* m_ui=new Test1_UI();
+    Test1_Property* m_property=new Test1_Property(parent);
+    Test1_Delegate*  m_delegate=new Test1_Delegate(m_property,m_ui,parent);
+Where Test1_UI inherits DataUIHandlerUI, Test1_Property DataUIHandlerProperty and Test1_Delegate from DataUIHandlerDelegate.
+
+Simple??
+Hopefully yes.
+
+Improvable?
+Absolutely yes.
+
+For everything refer to 
+lawrence.iviani@gmail.com
