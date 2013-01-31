@@ -1,6 +1,6 @@
-#include "test1_ui.h"
+#include "Test2_UI1.h"
 
-Test1_UI::Test1_UI(QWidget *parent) :
+Test2_UI1::Test2_UI1(QWidget *parent) :
     DataUiHandlerUI(parent)
 {
     createAndLayoutWidget();
@@ -13,7 +13,7 @@ Test1_UI::Test1_UI(QWidget *parent) :
     connect(m_description,SIGNAL(textChanged(QString)),this,SIGNAL(descriptionUIChanged(QString)));
 }
 
-void Test1_UI::createAndLayoutWidget() {
+void Test2_UI1::createAndLayoutWidget() {
     QWidget *_widget=new QWidget(this);
     QVBoxLayout *_layout=new QVBoxLayout();
     _widget->setLayout(_layout);
@@ -27,21 +27,20 @@ void Test1_UI::createAndLayoutWidget() {
     _layout->addWidget(m_description);
     _layout->addWidget(m_foo);
 
-    this->addWidget(_widget,"Test1_UI");
+    this->addWidget(_widget,"Test2_UI1");
 }
 
 //-------------- SLOTS --------------//
-void Test1_UI::fooUIUpdate(QString foo) {
+void Test2_UI1::fooUIUpdate(QString foo) {
     m_foo->setText(foo);
 }
 
-void Test1_UI::descriptionUIUpdate(QString description) {
+void Test2_UI1::descriptionUIUpdate(QString description) {
     m_description->setText(description);
 }
 
-void Test1_UI::uuidUIUpdate(QUuid uuid) {
-    m_uuid->setText(uuid.toString());   
+void Test2_UI1::uuidUIUpdate(QUuid uuid) {
+    m_uuid->setText(uuid.toString());
     int _minLen=0.7*m_uuid->font().pointSize()* m_uuid->text().length();// a trick...
     m_uuid->setMinimumSize(_minLen,20);
 }
-

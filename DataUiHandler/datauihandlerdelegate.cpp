@@ -39,6 +39,11 @@ DataUiHandlerDelegate::DataUiHandlerDelegate(DataUiHandlerProperty * property,
     initClass();
 }
 
+DataUiHandlerDelegate::~DataUiHandlerDelegate() {
+    delete m_property;
+    delete m_ui;
+}
+
 void DataUiHandlerDelegate::initClass() {
     PRINT_DEBUG_LEVEL (ErrorMessage::DEBUG_NOT_SO_IMPORTANT,ErrorMessage::DEBUG(Q_FUNC_INFO,"\t--------- Connecting signal ---------"));
     connectSignal();

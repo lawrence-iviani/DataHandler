@@ -4,7 +4,7 @@ DataUiHandlerProperty::DataUiHandlerProperty(QObject *parent) :
     QObject(parent),
     m_description("no description")
 {
-    this->setObjectName("GetterSetterProperty");
+    this->setObjectName("DataUiHandlerProperty");
     m_uuid=QUuid::createUuid();
 }
 

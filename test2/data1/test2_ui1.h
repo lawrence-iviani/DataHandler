@@ -1,16 +1,15 @@
-#ifndef TEST1_UI_H
-#define TEST1_UI_H
+#ifndef TEST2_UI1_H
+#define TEST2_UI1_H
 
 #include <datauihandlerui.h>
 #include <QVBoxLayout>
 #include <QLineEdit>
-#include <QWidget>
 
-class Test1_UI : public DataUiHandlerUI
+class Test2_UI1 : public DataUiHandlerUI
 {
     Q_OBJECT
 public:
-    Test1_UI(QWidget *parent = 0);
+    Test2_UI1(QWidget *parent = 0);
 
 signals:
     void fooUIChanged(QString foo);
@@ -28,4 +27,4 @@ private:
     QLineEdit * m_foo;
 };
 
-#endif // TEST1_UI_H
+#endif // TEST2_UI1_H

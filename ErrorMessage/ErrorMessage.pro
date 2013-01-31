@@ -10,9 +10,7 @@ TARGET = ErrorMessage
 TEMPLATE = lib
 
 DEFINES += ERRORMESSAGE_LIBRARY
-
 SOURCES += errormessage.cpp
-
 HEADERS += errormessage.h\
         ErrorMessage_global.h
 

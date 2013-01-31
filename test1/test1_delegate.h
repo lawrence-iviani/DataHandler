@@ -9,6 +9,7 @@ class Test1_Delegate : public DataUiHandlerDelegate
 {
 public:
     Test1_Delegate(Test1_Property * property, Test1_UI * ui , QObject *parent = 0);
+
 };
 
 #endif // TEST1_DELEGATE_H

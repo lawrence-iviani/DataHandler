@@ -51,6 +51,10 @@ public:
      */
     explicit DataUiHandlerDelegate(DataUiHandlerProperty * property, DataUiHandlerUI * ui ,QString docType=DOMHELPER_OBJECTTYPE_TAG, QString rootTag=DOMHELPER_DEFAULT_ROOT_TAG, QString fileExtension=DOMHELPER_DEFAULT_FILE_SUFFIX,  QObject *parent = 0);
 
+    virtual ~DataUiHandlerDelegate();
+
+    virtual DataUiHandlerProperty * getProperty() {return m_property;}
+    virtual DataUiHandlerUI * getUI() {return m_ui;}
 
 signals:
     

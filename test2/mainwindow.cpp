@@ -6,7 +6,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    qApp->setStyleSheet("QWidget { background-color: cyan } QLineEdit { selection-background-color : white } QPushButton { background-color: yellow }");
+
+    qApp->setStyleSheet("QWidget { background-color: yellow } QLineEdit { selection-background-color : blue } QPushButton { background-color: red }");
+
     ui->setupUi(this);
     ui->centralWidget->setLayout(new QVBoxLayout());
  //   m_treeWidget=new QTreeWidget();
@@ -27,7 +29,7 @@ void MainWindow::initData() {
     QFrame * _f1=new QFrame(this);
     _f1->setLayout((QLayout*) new QVBoxLayout());
     _f1->setFrameStyle(QFrame::Panel | QFrame::Raised);
-    m_data1=new Test1_data(this);
+    m_data1=new Test2_data2(this);
     _f1->layout()->addWidget(m_data1->getWidget());
 
     //Adding Copy&paste widget for data1
@@ -69,7 +71,7 @@ void MainWindow::initData() {
     QFrame * _f2=new QFrame(this);
     _f2->setLayout((QLayout*) new QVBoxLayout());
     _f2->setFrameStyle(QFrame::Panel | QFrame::Raised);
-    m_data2=new Test1_data(this);
+    m_data2=new Test2_data2(this);
     _f2->layout()->addWidget(m_data2->getWidget());
 
     //Adding Copy&paste widget for data2
@@ -105,12 +107,6 @@ void MainWindow::initData() {
     _f2->layout()->addWidget(_w2_cp);
     _f2->layout()->addWidget(_w2_ie);
     ui->centralWidget->layout()->addWidget(_f2);
-
-    //Init Data
-    m_data1->getProperty()->setDescription("This is data1");
-    m_data1->getProperty()->setFoo("This is foo1");
-
-
 }
 
 void MainWindow::copyData1Pressed() {
