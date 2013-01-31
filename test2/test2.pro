@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Test1
 TEMPLATE = app
 
+DEFINES += DEBUG_LEVEL=3
 
 SOURCES += data1/test2_data1.cpp \
     data1/test2_delegate1.cpp \

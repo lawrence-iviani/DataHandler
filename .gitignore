@@ -40,3 +40,23 @@ ErrorMessage/Makefile
 ErrorMessage/Makefile
 
 ErrorMessage/Makefile
+
+test2/debug/moc/moc_mainwindow.cpp
+
+test2/debug/moc/moc_test2_data1.cpp
+
+test2/debug/moc/moc_test2_data2.cpp
+
+test2/debug/moc/moc_test2_property1.cpp
+
+test2/debug/moc/moc_test2_property2.cpp
+
+test2/debug/Test1.app/Contents/MacOS/Test1
+
+test2/Makefile
+
+*.cpp
+
+test2/debug/moc/moc_test2_ui1.cpp
+
+test2/debug/moc/moc_test2_ui2.cpp
