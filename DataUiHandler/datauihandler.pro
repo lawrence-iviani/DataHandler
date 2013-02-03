@@ -12,21 +12,27 @@ TARGET = DataUiHandler
 TEMPLATE = lib
 
 QMAKE_CLEAN += *.o *.dll *.so *.a *.dylib
+CONFIG += ordered
 
-SOURCES += XML_utils/domhelper.cpp \
-    XML_utils/domhelperutility.cpp \
+
+SOURCES +=    datauihandlerdelegate.cpp \
     datauihandlerproperty.cpp \
     datauihandlerui.cpp \
-    datauihandlerdelegate.cpp \
+    XML_utils/domhelper.cpp \
+    XML_utils/domhelperutility.cpp \
 
-HEADERS  += mainwindow.h \
-    XML_utils/domhelper_constant.h \
-    XML_utils/domhelperutility.h \
-    XML_utils/domhelper.h \
-    datauihandlercommon.h \
+
+
+HEADERS  += datauihandlercommon.h \
+    datauihandlerdelegate.h \
     datauihandlerproperty.h \
     datauihandlerui.h \
-    datauihandlerdelegate.h
+    XML_utils/domhelper_constant.h \
+    XML_utils/domhelper.h \
+    XML_utils/domhelperutility.h \
+
+
+
 
 CONFIG(debug, debug|release) {
     DESTDIR = debug

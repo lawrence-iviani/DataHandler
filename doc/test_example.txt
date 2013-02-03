@@ -1,0 +1,15 @@
+There are 3 example in this tiny framework.
+
+TEST1
+A very simple example and definition of the class.
+The 3 class are explained and a very little show on how to use it.
+
+TEST2.
+A little bit more complicated, this design can be used when you have some basic class property and UI (in the example data1) that need to be extended with another (data2).
+In this design you don't need to inherit some "special" methods from data 1 but only property and UI.
+
+TEST3.
+This example explain how data2  can inherits from data1 maintaining not only the property and the UI but also the method.
+This example explain also how to keep properties that are already init.
+For example data1 ha some internal init that want to  be constant when data2 properties instance its own class.
+Also the method upperCaseFoo is kept  in the game (yes, but with an explicit call!!!). THe trick for now is use some protected method.

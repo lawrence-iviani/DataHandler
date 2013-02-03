@@ -60,3 +60,17 @@ test2/Makefile
 test2/debug/moc/moc_test2_ui1.cpp
 
 test2/debug/moc/moc_test2_ui2.cpp
+
+test3/test3.pro
+
+test3/debug/Test3.app/Contents/Resources/empty.lproj
+
+test3/debug/Test3.app/Contents/PkgInfo
+
+test3/debug/Test3.app/Contents/MacOS/Test3
+
+test3/Makefile
+
+doc/._HOWTO.txt
+
+doc/._test_example.txt

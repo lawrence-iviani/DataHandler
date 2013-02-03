@@ -9,10 +9,10 @@
 #include "datauihandlerproperty.h"
 #include "datauihandlerui.h"
 #include "XML_utils/domhelper.h"
-#include "XML_utils/domhelperutility.h"
 
 class DataUiHandlerProperty;
 class DataUiHandlerUI;
+
 
 /**
  * @brief The GetterSetterDelegate class
@@ -53,8 +53,10 @@ public:
 
     virtual ~DataUiHandlerDelegate();
 
-    virtual DataUiHandlerProperty * getProperty() {return m_property;}
-    virtual DataUiHandlerUI * getUI() {return m_ui;}
+    DataUiHandlerProperty * getProperty() {return m_property;}
+    DataUiHandlerUI * getUI() {return m_ui;}
+
+    void replacePropertiesAndUI(DataUiHandlerProperty *properties, DataUiHandlerUI *ui);
 
 signals:
     
@@ -71,7 +73,7 @@ private:
      * @brief connectSignal Connect and verify connection between the signal/slot
      * Look in the property and find if exist, and thus connect, the relative widget
      */
-    void connectSignal();
+    void connectSignal(DataUiHandlerProperty *properties, DataUiHandlerUI *ui);
 
     /**
      * @brief findMethod find a method with a well know syntax and return the complete name as a signature (refer to QMetaMethod)

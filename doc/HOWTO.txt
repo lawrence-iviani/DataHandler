@@ -63,6 +63,8 @@ Please note foo + UIUpdate (uppercase/lowercase are important)
 
 1. Create a delegate class that inherits from DataUIHandlerDelegate
 2. This class should re-implement only the constructor
+NOTE:
+This class is not necessary, it's enough just instantiate, and store in a class the basic class  DataUIHandlerDelegate. See test3 for more informations.
 
 For example, Test1_delegate
 

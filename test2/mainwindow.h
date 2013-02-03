@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include "data1/test2_data1.h"
 #include "data2/test2_data2.h"
+#include <QTreeWidget>
+#include <XML_utils/domhelperutility.h>
 
 #define FILE_PATH "/Volumes/MYDATA/QT_TEST/gettersetter/test1_testfiles"
 namespace Ui {

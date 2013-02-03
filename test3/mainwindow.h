@@ -5,8 +5,9 @@
 #include <QPushButton>
 #include <QFileDialog>
 #include <QTreeWidget>
-#include <XML_utils/domhelperutility.h>
-#include "test1_data.h"
+#include "data1/test3_data1.h"
+#include "data2/test3_data2.h"
+#include  "XML_utils/domhelperutility.h"
 
 #define FILE_PATH "/Volumes/MYDATA/QT_TEST/gettersetter/test1_testfiles"
 namespace Ui {
@@ -37,8 +38,8 @@ private:
 
     void initData();
 
-    Test1_data * m_data1;
-    Test1_data * m_data2;
+    Test3_data2 * m_data1;
+    Test3_data2 * m_data2;
     QDomNode m_clipboard;
     QTreeWidget * m_treeWidget;
 };
