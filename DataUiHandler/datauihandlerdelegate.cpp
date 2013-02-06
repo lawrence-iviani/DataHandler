@@ -56,9 +56,11 @@ void DataUiHandlerDelegate::initClass() {
 }
 
 void DataUiHandlerDelegate::connectSignal(DataUiHandlerProperty *properties, DataUiHandlerUI *ui) {
-    if (properties==NULL || ui==NULL) {
+    if (properties==NULL || ui==NULL) {        
         PRINT_WARNING( ErrorMessage::WARNING(Q_FUNC_INFO,
-                     QString("trying to connect unreferenced data, property@%1, UI@%2").arg((qlonglong)properties).arg((qlonglong)ui)));
+                     QString("trying to connect unreferenced data, property@%1, UI@%2").
+                                             arg(QString::number((qlonglong)properties,16)).
+                                             arg(QString::number((qlonglong)ui,16))));
         return;
     }
 
@@ -223,16 +225,16 @@ const QStringList DataUiHandlerDelegate::extractMethodSignatureList(const QMetaO
 }
 
 void DataUiHandlerDelegate::dataChanged() {
-    PRINT_DEBUG_LEVEL (ErrorMessage::DEBUG_NOT_SO_IMPORTANT, ErrorMessage::DEBUG(Q_FUNC_INFO,"slot called!"));
+    PRINT_DEBUG_LEVEL (ErrorMessage::DEBUG_NOT_IMPORTANT, ErrorMessage::DEBUG(Q_FUNC_INFO,"slot called!"));
     //updateDOM
     if (m_updateDataEnabled &&  !isImportingDomData()) {
         if (!this->selfObjectData()) {
             PRINT_WARNING(ErrorMessage::WARNING(Q_FUNC_INFO,"Something was wrong when try to generate the self objcet DOM data"));
         } else  {
-            PRINT_DEBUG_LEVEL (ErrorMessage::DEBUG_NOT_SO_IMPORTANT, ErrorMessage::DEBUG(Q_FUNC_INFO,"doc is \n%1\n").arg(getDomDocument().toString(4)));
+            PRINT_DEBUG_LEVEL (ErrorMessage::DEBUG_NOT_IMPORTANT, ErrorMessage::DEBUG(Q_FUNC_INFO,"doc is \n%1\n").arg(getDomDocument().toString(4)));
         }
     } else {
-        PRINT_DEBUG_LEVEL (ErrorMessage::DEBUG_NOT_SO_IMPORTANT, ErrorMessage::DEBUG(Q_FUNC_INFO,"Do nothing!"));
+        PRINT_DEBUG_LEVEL (ErrorMessage::DEBUG_NOT_IMPORTANT, ErrorMessage::DEBUG(Q_FUNC_INFO,"Do nothing!"));
     }
 }
 
@@ -248,10 +250,11 @@ bool DataUiHandlerDelegate::setEnableDataUpdate(bool enable) {
 void DataUiHandlerDelegate::replacePropertiesAndUI(DataUiHandlerProperty *properties, DataUiHandlerUI *ui) {
     //Should delete the signal connection?
     ErrorMessage _err1(Q_FUNC_INFO, QString("Prev Internal ref m_property@%1 m_ui@%2, new ref. properties@%3, ui@%4")
-                        .arg((qlonglong)m_property)
-                        .arg((qlonglong)m_ui)
-                        .arg((qlonglong)properties)
-                        .arg((qlonglong)ui));
+                       .arg(QString::number((qlonglong)m_property,16))
+                       .arg(QString::number((qlonglong)m_ui,16))
+                       .arg(QString::number((qlonglong)properties,16))
+                       .arg(QString::number((qlonglong)ui,16)));
+
     if (properties==NULL || ui==NULL) {
         PRINT_WARNING( ErrorMessage::WARNING(Q_FUNC_INFO,
                      QString("trying to connect unreferenced data, property@%1, UI@%2").arg((qlonglong)properties).arg((qlonglong)ui)));
@@ -259,25 +262,57 @@ void DataUiHandlerDelegate::replacePropertiesAndUI(DataUiHandlerProperty *proper
     }
     DataUiHandlerProperty *prevProperties=m_property;
     DataUiHandlerUI *prevUi=m_ui;
-   // if (m_property) delete m_property;
-   // if (m_ui) delete m_ui;
+
+    QHash<QString, QVariant> _hashProperties;
+    readProperties(m_property,_hashProperties);
 
     m_property=properties;
     m_ui=ui;
+
     ErrorMessage _err2(Q_FUNC_INFO, QString("Now  internal ref m_property@%1 m_ui@%2, new ref. properties@%3, ui@%4")
-                        .arg((qlonglong)m_property)
-                        .arg((qlonglong)m_ui)
-                        .arg((qlonglong)properties)
-                        .arg((qlonglong)ui));
+                        .arg(QString::number((qlonglong)m_property,16))
+                        .arg(QString::number((qlonglong)m_ui,16))
+                        .arg(QString::number((qlonglong)properties,16))
+                        .arg(QString::number((qlonglong)ui,16)));
 
 
     PRINT_DEBUG_LEVEL (ErrorMessage::DEBUG_NOT_SO_IMPORTANT,_err1);
     PRINT_DEBUG_LEVEL (ErrorMessage::DEBUG_NOT_SO_IMPORTANT,_err2);
+
+
     setHostObject(m_property);
     initClass();
+    writeProperties(m_property,_hashProperties);
 
-    //These leads to a crash, but without lead to a memory leakaga... (BUG)!
-    delete prevProperties;
-    delete prevUi;
+    //These leads to a crash, but without lead to a memory leakage... (BUG)!
+    delete(prevProperties);
+    delete(prevUi);
 
 }
+
+void DataUiHandlerDelegate::readProperties(DataUiHandlerProperty *properties, QHash<QString, QVariant>& hash) {
+    const QMetaObject* _propMetaObject = properties->metaObject();
+    for (int n=0; n < _propMetaObject->propertyCount() ; n++) {
+        QMetaProperty _prop=_propMetaObject->property(n);
+        QString _propName=_prop.name();
+        QVariant _propValueVariant=_prop.read(properties);
+        if (_propValueVariant.isValid())
+            hash[_propName] = _propValueVariant;
+    }
+}
+
+void DataUiHandlerDelegate::writeProperties(DataUiHandlerProperty *properties, QHash<QString, QVariant>& hash) {
+    const QMetaObject* _propMetaObject = properties->metaObject();
+    for (int n=0; n < _propMetaObject->propertyCount() ; n++) {
+        QMetaProperty _prop=_propMetaObject->property(n);
+        QString _propName=_prop.name();
+        if (hash.contains(_propName)) {
+             QVariant  _propValueVariant = hash.value(_propName);
+             if (!_prop.write(properties,_propValueVariant))
+                 Q_ASSERT(false);
+        }
+    }
+
+}
+
+
