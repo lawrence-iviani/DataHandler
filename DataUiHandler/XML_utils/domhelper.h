@@ -8,7 +8,7 @@
 #include <QDebug>
 #include <errormessage.h>
 #include "domhelper_constant.h"
-
+#include "domhelperutility.h"
 
 
 /**
@@ -23,7 +23,7 @@ public:
      * base class.
      * @param hostObj
      */
-    explicit DomHelper(QObject *hostDelegate,QString docType=DOMHELPER_OBJECTTYPE_TAG, QString rootTag=DOMHELPER_DEFAULT_ROOT_TAG,QString fileExtension=DOMHELPER_DEFAULT_FILE_SUFFIX);
+    explicit DomHelper(QObject *hostDelegate, QString docType=DOMHELPER_DEFAULT_DOCTYPE, QString rootTag=DOMHELPER_DEFAULT_ROOT_TAG, uint version=DOMHELPER_VERSION, QString fileExtension=DOMHELPER_DEFAULT_FILE_SUFFIX);
     explicit DomHelper();
     virtual ~DomHelper();
     
@@ -33,41 +33,45 @@ public:
      */
     const QDomNode getRootNode() { return (const QDomNode) m_document->firstChild().cloneNode(true); }
 
-    const QDomDocument& getDomDocument() {return (const QDomDocument&) *m_document;}
+    const QDomDocument getDomDocument();
 
     /**
      * @brief setClassByDomData Set the class by importing a QDomNode, there must be compatibility in the ROOT tag of the relative XML
      * @param doc
+     * @param allowUpdate by default true, this means that signals are emitted for every properties change
      * @param errMessage
      * @return
      */
-    bool setClassByDomData(const QDomNode& doc, ErrorMessage* errMessage=NULL);
+    bool setClassByDomData(const QDomNode& doc, bool allowUpdate=true, ErrorMessage* errMessage=NULL);
 
     /**
      * @brief setClassByDomData Set the class by importing a QDomNode, there must be compatibility in the ROOT tag of the relative XML
      * @param doc
+     * @param allowUpdate by default true, this means that signals are emitted for every properties change
      * @param errMessage
      * @return
      */
-    bool setClassByDomData(const QDomNode* doc, ErrorMessage* errMessage=NULL);
+    bool setClassByDomData(const QDomNode* doc, bool allowUpdate=true, ErrorMessage* errMessage=NULL);
 
     /**
      * @brief setClassByDomData setClassByDomData Set the class by importing a QDomNode, there must be compatibility in the ROOT tag of the relative XML
      * and in the document type specified for this class
      * @param doc the reference to doc
+     * @param allowUpdate by default true, this means that signals are emitted for every properties change
      * @param errMessage
      * @return
      */
-    bool setClassByDomData(const QDomDocument& doc, ErrorMessage* errMessage=NULL);
+    bool setClassByDomData(const QDomDocument& doc, bool allowUpdate=true, ErrorMessage* errMessage=NULL);
 
     /**
      * @brief setClassByDomData setClassByDomData Set the class by importing a QDomNode, there must be compatibility in the ROOT tag of the relative XML
      * and in the document type specified for this class
      * @param doc the pointer to doc
+     * @param allowUpdate by default true, this means that signals are emitted for every properties change
      * @param errMessage
      * @return
      */
-    bool setClassByDomData(const QDomDocument* doc, ErrorMessage* errMessage=NULL);
+    bool setClassByDomData(const QDomDocument* doc, bool allowUpdate=true, ErrorMessage* errMessage=NULL);
 
 
     /**
@@ -100,11 +104,10 @@ public:
     virtual bool isImportableByDomData(const QDomNode* node, ErrorMessage* errMessage=NULL);
 
     bool isImportingDomData() {return m_importingDomData;}
-    //OLD
-    bool isSameObjectType(const QString objectType) { return (QString::compare(objectType,m_hostObject->metaObject()->className())==0);}
-   // QString objectType() {return m_hostObject->metaObject()->className();}
 
-//    static bool isSameObjectType(const QDomDocument *doc, QObject *obj);
+    void addUnhandleableNode(const QString& nodeName) {m_unhandleableNodes << nodeName;}
+    const QStringList* getUnhandleableNode() {return (const QStringList*) &m_unhandleableNodes;}
+
 
 public slots:
 
@@ -116,12 +119,12 @@ protected:
      */
     void setHostObject(QObject* obj);
 
-    /**
-     * @brief isSameObjectType test if the tag objectType is of the same objetType descripted in the XML
-     * @param element  the element need to be verified (should be a node) if is compatible with this class.
-     * @return
-     */
-    bool isSameObjectType(const QDomElement &element);
+//    /**
+//     * @brief isSameObjectType test if the tag objectType is of the same objetType descripted in the XML
+//     * @param element  the element need to be verified (should be a node) if is compatible with this class.
+//     * @return
+//     */
+//    bool isSameObjectType(const QDomElement &element);
 
     /**
      * @brief DomHelper::selfObjectData extract the classname and the object properties from itself obj and stores it in DOM root element
@@ -157,9 +160,19 @@ private:
     QString m_fileSuffix;
 
     /**
+     * @brief m_version The version of this data
+     */
+    uint m_version;
+
+    /**
      * @brief m_importingDomData This flag report is set to true every time this class is importing data with the appropriate methods.
      */
     bool m_importingDomData;
+
+    /**
+     * @brief m_unhandleableNodes A list of nodes that will be not used
+     */
+    QStringList m_unhandleableNodes;
 
     void initDomDocument();
     void deleteDomDocument();
@@ -180,11 +193,32 @@ private:
     bool parseAndSetProperty(const QDomElement &element, QMetaProperty &metaProperties);
 
     /**
-     * @brief parseAndVerifyAttributeVersion verify it the attributes contain a  version attribute and validate it.
+     * @brief parseAndVerifyAttributeVersion verify if the attributes contain a  version attribute and validate it.
      * @param element
-     * @return true if the version is compatible and if tag version is not found.
+     * @return true if the version is compatible or else if attribute version is not found.
      */
     bool parseAndVerifyAttributeVersion(const QDomNamedNodeMap &element);
+
+    /**
+     * @brief parseAndVerifyAttributeObjecttype verify if the attributes contain an objecttype attribute and validate it.
+     * @param element
+     * @return true if the version is compatible or else if attribute Objecttype is not found.
+     */
+    bool parseAndVerifyAttributeObjecttype(const QDomNamedNodeMap &element);
+
+    /**
+     * @brief isCorrectObjectType Verify if node is a valid objecttype coherent with host object
+     * @param node
+     * @return
+     */
+    bool isCorrectObjectType(const QDomNode& node);
+
+    /**
+     * @brief isCorrectVersion Verify if the version of the object is consistent with the class one
+     * @param node
+     * @return
+     */
+    bool isCorrectVersion(const QDomNode& node);
 
     /**
      * @brief removeAllChildNodes Remove all childs nodes (if any) from node

@@ -39,7 +39,7 @@ public:
      * @param rootTag
      * @param parent
      */
-    explicit DataUiHandlerDelegate(DataUiHandlerProperty * property, DataUiHandlerUI * ui ,QString docType=DOMHELPER_OBJECTTYPE_TAG, QString rootTag=DOMHELPER_DEFAULT_ROOT_TAG,  QObject *parent = 0);
+    explicit DataUiHandlerDelegate(DataUiHandlerProperty * property, DataUiHandlerUI * ui, QString docType=DOMHELPER_DEFAULT_DOCTYPE, QString rootTag=DOMHELPER_DEFAULT_ROOT_TAG, uint version=DOMHELPER_VERSION,  QObject *parent = 0);
 
     /**
      * @brief DataUiHandlerDelegate
@@ -50,14 +50,20 @@ public:
      * @param fileExtension
      * @param parent
      */
-    explicit DataUiHandlerDelegate(DataUiHandlerProperty * property, DataUiHandlerUI * ui ,QString docType=DOMHELPER_OBJECTTYPE_TAG, QString rootTag=DOMHELPER_DEFAULT_ROOT_TAG, QString fileExtension=DOMHELPER_DEFAULT_FILE_SUFFIX,  QObject *parent = 0);
+    explicit DataUiHandlerDelegate(DataUiHandlerProperty * property, DataUiHandlerUI * ui ,QString docType=DOMHELPER_DEFAULT_DOCTYPE, QString rootTag=DOMHELPER_DEFAULT_ROOT_TAG, uint version=DOMHELPER_VERSION, QString fileExtension=DOMHELPER_DEFAULT_FILE_SUFFIX,  QObject *parent = 0);
 
     virtual ~DataUiHandlerDelegate();
 
     DataUiHandlerProperty * getProperty() {return m_property;}
     DataUiHandlerUI * getUI() {return m_ui;}
 
+    /**
+     * @brief replacePropertiesAndUI change the properties & UI association of this class with a new one
+     * @param properties
+     * @param ui
+     */
     void replacePropertiesAndUI(DataUiHandlerProperty *properties, DataUiHandlerUI *ui);
+
 
 signals:
     
@@ -86,7 +92,7 @@ private:
 
     /**
      * @brief findSignalSignature Given a certain QMetaObject this method look in and find if exists a method with
-     * a certain methodSignature a returns the complete SignalSignature
+     * a certain methodSignature and returns the complete SignalSignature
      * @param metaObj
      * @param methodSignature
      * @return return an empty string if the slot isn't found
@@ -95,7 +101,7 @@ private:
 
     /**
      * @brief findSlotSignature Given a certain QMetaObject this method look in and find if exists a method with
-     * a certain methodSignature a returns the complete SlotSignature
+     * a certain methodSignature and returns the complete SlotSignature
      * @param metaObj
      * @param methodSignature
      * @return return an empty string if the slot isn't found

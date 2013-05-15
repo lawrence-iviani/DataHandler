@@ -74,3 +74,5 @@ test3/Makefile
 doc/._HOWTO.txt
 
 doc/._test_example.txt
+
+datauihandler-build-Desktop-Debug/Makefile
